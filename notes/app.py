@@ -7,8 +7,8 @@ migrate = Migrate()
 
 
 def create_app():
-    from notes_backend.api_namespace import api_namespace
-    from notes_backend.db import db, db_config
+    from notes.api_namespace import api_namespace
+    from notes.db import db, db_config
 
     app = Flask(__name__)
     api = Api(app, version='0.1', title='Notes Backend API',

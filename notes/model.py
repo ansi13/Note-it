@@ -1,5 +1,5 @@
 from sqlalchemy import func
-from notes_backend.db import db
+from notes.db import db
 
 
 class NotesModel(db.Model):

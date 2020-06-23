@@ -1,3 +1,3 @@
-from notes_backend.app import create_app
+from notes.app import create_app
 
 application = create_app()

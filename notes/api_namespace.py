@@ -4,8 +4,8 @@ import http.client
 # from flask import abort
 from flask_restx import Namespace, Resource, fields, reqparse
 
-from notes_backend.db import db
-from notes_backend.model import NotesModel
+from notes.db import db
+from notes.model import NotesModel
 
 
 api_namespace = Namespace('api', description='Notes App - Public API')
