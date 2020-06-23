@@ -44,4 +44,4 @@ COPY --chown=gunicorn:gunicorn notes /opt/code/notes/
 # Run parameters
 WORKDIR /opt/code
 EXPOSE 8000
-CMD gunicorn -c python:gunicorn_conf wsgi:application
+CMD exec gunicorn -c python:gunicorn_conf wsgi:application

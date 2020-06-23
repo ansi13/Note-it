@@ -56,7 +56,7 @@ class Notes(Resource):
         return result, http.client.CREATED
 
 
-@api_namespace.route('/notes/<int:note_id>')
+@api_namespace.route('/notes/<int:note_id>/')
 class NotesView(Resource):
 
     @api_namespace.doc('View a Note')
