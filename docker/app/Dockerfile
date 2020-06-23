@@ -39,7 +39,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy the code
 COPY --chown=gunicorn:gunicorn gunicorn_conf.py wsgi.py /opt/code/
-COPY --chown=gunicorn:gunicorn notes_backend /opt/code/notes_backend/
+COPY --chown=gunicorn:gunicorn notes /opt/code/notes/
 
 # Run parameters
 WORKDIR /opt/code
