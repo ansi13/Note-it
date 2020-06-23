@@ -16,7 +16,7 @@ RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip3 install --upgrade pip
-COPY requirements.txt /opt/
+COPY NotesBackend/requirements.txt /opt/
 RUN pip3 install -r /opt/requirements.txt
 
 ########
@@ -38,10 +38,10 @@ COPY --chown=gunicorn:gunicorn --from=compile-image /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 # Copy the code
-COPY --chown=gunicorn:gunicorn gunicorn_conf.py wsgi.py /opt/code/
-COPY --chown=gunicorn:gunicorn notes /opt/code/notes/
+#COPY --chown=gunicorn:gunicorn gunicorn_conf.py wsgi.py /opt/code/
+COPY --chown=gunicorn:gunicorn NotesBackend /opt/code/
 
 # Run parameters
 WORKDIR /opt/code
 EXPOSE 8000
-CMD exec gunicorn -c python:gunicorn_conf wsgi:application
+CMD gunicorn -c python:gunicorn_conf wsgi:application
