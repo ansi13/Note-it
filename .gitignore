@@ -1,0 +1,12 @@
+# Log files & folders
+logs/
+*.log
+
+# Sqlite3 DB
+*.sqlite3
+
+# venv folder
+venv/
+
+# misc folders
+.idea/
