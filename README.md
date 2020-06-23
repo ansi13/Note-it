@@ -1,2 +1,2 @@
 # Note-it
-Backend API for notes
+Backend API for Note-it app.
