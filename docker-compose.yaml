@@ -1,0 +1,52 @@
+version: '3.7'
+
+services:
+    # Development related
+    test-sqlite:
+        environment:
+            - PYTHONDONTWRITEBYTECODE=1
+        build:
+            dockerfile: docker/app/Dockerfile
+            context: .
+        entrypoint: pytest
+        volumes:
+            - "./NotesBackend:/opt/code:rw"
+
+    test-postgresql:
+        env_file: environment.env
+        environment:
+            - PYTHONDONTWRITEBYTECODE=1
+        build:
+            dockerfile: docker/app/Dockerfile
+            context: .
+        entrypoint: pytest
+        depends_on:
+            - db
+        volumes:
+            - "./NotesBackend:/opt/code:rw"
+
+    db:
+        build:
+            context: .
+            dockerfile: ./docker/db/Dockerfile
+            args:
+                # These values should be in sync with environment
+                # for development. If you change them, you'll
+                # need to rebuild the container
+                - POSTGRES_DB=notes
+                - POSTGRES_USER=postgres
+                - POSTGRES_PASSWORD=password##123
+                - POSTGRES_PORT=5432
+        ports:
+            - "5432:5432"
+
+    server:
+        env_file: environment.env
+        image: notes_server
+        build:
+            context: .
+            dockerfile: docker/app/Dockerfile
+        ports:
+            - "8000:8000"
+        depends_on:
+            - db
