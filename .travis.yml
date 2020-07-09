@@ -13,7 +13,6 @@ before_install:
   - docker-compose version
 
 script:
-- cd ch4
 - docker-compose build db
 - docker-compose build static-analysis
 - docker-compose build test-postgresql

@@ -11,7 +11,8 @@ from notes.model import NotesModel
 api_namespace = Namespace('api', description='Notes App - Public API')
 
 note_parser = reqparse.RequestParser()
-note_parser.add_argument('text', required=True, help='Text for the note object', location='form')
+note_parser.add_argument('text', required=True,
+                         help='Text for the note object', location='form')
 
 search_parser = reqparse.RequestParser()
 search_parser.add_argument('search', help='Search keyword')
@@ -47,7 +48,9 @@ class Notes(Resource):
     @api_namespace.marshal_with(note_model, code=http.client.CREATED)
     def post(self):
         args = note_parser.parse_args()
-        new_note = NotesModel(text=args['text'], time_created=datetime.utcnow(), time_modified=datetime.utcnow())
+        new_note = NotesModel(text=args['text'],
+                              time_created=datetime.utcnow(),
+                              time_modified=datetime.utcnow())
 
         db.session.add(new_note)
         db.session.commit()
@@ -84,7 +87,8 @@ class NotesView(Resource):
 
         return result
 
-    @api_namespace.doc('Delete a particular Note', responses={http.client.NO_CONTENT: 'No content'})
+    @api_namespace.doc('Delete a particular Note',
+                       responses={http.client.NO_CONTENT: 'No content'})
     def delete(self, note_id):
         note = NotesModel.query.get(note_id)
         if not note:
