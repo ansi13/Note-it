@@ -12,9 +12,16 @@ before_install:
   - docker --version
   - docker-compose version
 
-script:
-- docker-compose build db
-- docker-compose build static-analysis
-- docker-compose build test-postgresql
-- docker-compose run test-postgresql
-- docker-compose run static-analysis
+jobs:
+  include:
+    - stage: tests
+      name: "Unit Tests"
+      script:
+      - docker-compose build db
+      - docker-compose build test-postgresql
+      - docker-compose run test-postgresql
+    - stage: tests
+      name: "Static Analysis"
+      script:
+      - docker-compose build static-analysis
+      - docker-compose run static-analysis
