@@ -16,7 +16,7 @@ RUN python3 -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 RUN pip3 install --upgrade pip
-COPY NotesBackend/requirements.txt /opt/
+COPY requirements.txt /opt/
 RUN pip3 install -r /opt/requirements.txt
 
 ########
