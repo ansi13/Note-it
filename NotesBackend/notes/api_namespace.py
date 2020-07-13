@@ -11,8 +11,7 @@ from notes.model import NotesModel
 api_namespace = Namespace('api', description='Notes App - Public API')
 
 note_parser = reqparse.RequestParser()
-note_parser.add_argument('text', required=True,
-                         help='Text for the note object', location='form')
+note_parser.add_argument('text', required=True, help='Text for the note object', location='form')
 
 search_parser = reqparse.RequestParser()
 search_parser.add_argument('search', help='Search keyword')
