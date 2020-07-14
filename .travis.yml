@@ -36,6 +36,6 @@ jobs:
         - docker tag notes_server:latest ansi13/notes-backend:$TRAVIS_BRANCH
       deploy:
         - provider: script
-          script: docker push <registry>/thoughts-backend:$TRAVIS_BRANCH
+          script: docker push ansi13/thoughts-backend:$TRAVIS_BRANCH
           on:
             branch: master
