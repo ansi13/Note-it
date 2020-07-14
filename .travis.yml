@@ -2,7 +2,10 @@ services:
   - docker
 
 env:
-  - DOCKER_COMPOSE_VERSION=1.26.0
+  global:
+    - DOCKER_COMPOSE_VERSION=1.26.0
+    - secure: "fXXyhCjn+hjRM3kDTymDsOAPLX/44bNGxRq4CjlMpxmzBXvZ0vbxYh8FwhD17Z06Kx/RFXTtkUHUsWJ+ZV8hLJT982mXO/+4SPB8A11mtvt31D4PD1GfvIBYJ4KbKiuBCsfSZC0ZD6LV3NMvMjMj154EoF5fngmrdlJO65dkJCMUkxHR03JCBIfVu5v4z1CmTqEL4gUF3b7cS62Bhuolp/jyPupeM/5YQ7PhRGUQnciqbYMDoTokQwzxAbC/t+Jg+Q/1VqqqbFnoIhxnv6QnlQt4V4ZyZDBjQhHBQ5X/w4qJH/nZLZu9XwS09HjKwPFZiFo3p2bR0eL5jyhA8lNbxqdIqmX7jCFQHLnoeMc36KLTn6BdwlD+AcA5wQM4OaHfutBkFIh2/2nwRW4jV/EDM3xUTn9rhMMmI2TObjs77C/bstCLde1cELzaB9C+o6wMc2j2+EG55eCwcH3XqSL+kG5rv7Mlll87RpyiECUSDS9eu8UBt3OB5+7wcJG7LlhrDZyReW3Q/GeIs6d2qr3HqjFaFNBh8PzU+F3LpDo+L4aTbW/XFXC9wfDuciW4nn0qMVTed48CNm0dgk6zS9zVUwryhnriQXBWEL/h0oZKm8+PNCnVTELJ3ypIji2RZ1rkMbs53cIKu+XfrG3zMs2cj42VZ/Bw3etNOf0BrpJ1YkU="
+    - secure: "P/2mcWRkxt5hfqrrUwBvjGra3Ww6r7vMuTfHMQW6YAd2KHNhCho329JMGhX2cslWJM3J4UmPS90HQKuvcsd6OtdcF+0zAXHjmQD4QyU6eEPPVjwwLqhERN5/68pLtYOYYN/naoo6vTrJE16fk4a/SgwwbLoO4sO5Tf3JiILp80W/plYEKBf6d0S18V5SjPi2UFXkpZh3isVa+5jDC8xM8TCP1lw64rjgm+SYSq+XIWcCqOtEstZzANIQKDYRHA4Jco6tA/VnHCo99Yp7HLzIdpxTJ6MjcGqbUM+tG5h1Y5FbWjQiOtx93YczAhZQGNV0wfCpQ6KycW+Gg/+shoMwIwR0d6eNjRrg9sHeWhKIw+8duStLTrK7l3HU1CEn6XU/pov+5bWDIa+yk3kvEnHMpO/sz9uPvOUMC8d5r3tiuoMPCxv81o9xioV5UiSsXUq05n0ntYhk1HUn8yWKwgxECVIOwNCkW0+Rqdq1x2dMvLMqavqr0LAKsedNwCeAiua8r/RA4fMRfSJeGbcdM5fe5H9nKhawi7nH6BQHKRsw2j7Hon2tmFtNJb7P/+8UOzBl252TuPA+SLLdKqAWNW9Uk3cqxbVh+ixsF8Ub8ISERe1cuhUf/HgJYty2xmJLRIf2MEeEgwGi696Q2MsB1VK0ekTzCcsfgAU1R6b4TWGIMMM="
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -11,6 +14,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker --version
   - docker-compose version
+  - echo "Login into Docker Hub"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 jobs:
   include:
@@ -25,3 +30,12 @@ jobs:
       script:
       - docker-compose build static-analysis
       - docker-compose run static-analysis
+    - stage: push
+      script:
+        - docker-compose build server
+        - docker tag notes_server:latest ansi13/notes-backend:$TRAVIS_BRANCH
+      deploy:
+        - provider: script
+          script: docker push ansi13/thoughts-backend:$TRAVIS_BRANCH
+          on:
+            branch: master
