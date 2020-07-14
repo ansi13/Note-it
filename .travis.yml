@@ -3,6 +3,8 @@ services:
 
 env:
   - DOCKER_COMPOSE_VERSION=1.26.0
+  - secure: "B88snO6lGYJmIX1VYpO3YR/Xkv814YkC5pC3s8nQNLmmFMKmrqz+vHYaOzZOfVqBYJmwa+yhObpC6Emd80SgciHb8K188k31DyGTIvd9AasThDhMYibTq1RI2B/uqRDdvgnXWAcqnaxoXu2VMaAHy6jyW2rbZqpu4rzox0lwmBve6TF9LmQT7iED/GFYXchkLsT+OJf63TnrrK07GCQUAGEzCPQqNDH44Fa/R7/jUbyVtDcu/qNQc5uu4Hh9QnQY50john5fKIadHZEBQH41c3pIzToJzew/ODp53QC+plja36d0FNA/Y18ruEiEdFJgsDYAhNxhioJ/1d22KKKH0sAT5tSxuD6AQi3tylN6vg+ZY+MkFUL25tan0Dkauj0CuxGQjUSVJ7AKWTOZgGHOlBzmStvFQP73M//80auuTwZ7k8d7iMB1Z/5vkIrp54cZe55o5Tji/9Tcr+Z4BOoNrthHWJKD5cu9Izu/yNAOI+pSiaxdqt3l1XtuHPDHQqrnDpDk7Ni7t6SziQfLBVDfMiRFR91W8tmiDRa1wfiu7DYaHjGUSaGUBoDinu7AsO1RsYr0v2RR7jGg/r5XNRf1XpxG8UtYn5M8dyi0dDpLhnOllDxoDtL11Mxfpo7UA2JNnITWU2E2r4upnfzPDnheSkPSBmnmYO8Yjvf4FtD/LSs="
+  - secure: "JcZL6QvwcAHApi5TD8RPIgcfvnXpF0aiqTVE2RQJM+8ZQTE6Ar8tDIYWxdcQR9QlDgMp4v//95WGy7iibX5zLYTRYF3JrergYUNIFiSrsxRsolNNbs4+hTcIsZMeScHdkSWl+hifMTrO1SW5wINr4DxEsUxQeuu27sz47fhgQuM1DLUTI8z/06jTYYZaXmDf6RZWDXx7NXK5cnoA24xN5QnYJvQ8k27a4edStpVoB5p/W1nIFpDDC/2bLVVf4S4LjsFzbCaV1GndKK9U74bV7fDcXSFdKGE+QcbJBIt8DohO32PAqW/G8bzFVyiEmjskZebHcSCmoPSAn/U1P+Z3nipZy6VAztJpexdg45dYcsC3kKtzu3ktznTV7CAH0JYWBTCfTJeeBisy1l9F7sh4KBKFWx0g7YHg0F8AD/cSbNZSjG7DgwXrZTS9KBcEoHDAkx0WBZJM/rL3WGvmq9K2IgJnbeJ5NYQ6eK8Lxc4S+yz4g0jSns2KMHSG4zYBiyDZhBknkVngenPQXk1Yit4KF2PsRKTuMlSKpmi27JV6H+Z9ULd2T2tKXpdWe6SAlXqAQQ+rFUWB3vUIloQWlngLbXBFMH9REy1YpUH2NR3zuzBbHHaefZVLcAfLL9nttdcnwex4ykJTCvPlywkZU1lVI4I8yL1UMtS/WzF7u0FwYG4="
 
 before_install:
   - sudo rm /usr/local/bin/docker-compose
@@ -11,6 +13,8 @@ before_install:
   - sudo mv docker-compose /usr/local/bin
   - docker --version
   - docker-compose version
+  - echo "Login into Docker Hub"
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
 jobs:
   include:
@@ -25,3 +29,12 @@ jobs:
       script:
       - docker-compose build static-analysis
       - docker-compose run static-analysis
+    - stage: push
+      script:
+        - docker-compose build server
+        - docker tag notes_server:latest ansi13/notes-backend:$TRAVIS_BRANCH
+      deploy:
+        - provider: script
+          script: docker push <registry>/thoughts-backend:$TRAVIS_BRANCH
+          on:
+            branch: master
