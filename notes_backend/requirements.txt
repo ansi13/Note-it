@@ -1,9 +1,13 @@
 alembic==1.4.2
 aniso8601==8.0.0
 attrs==19.3.0
+Babel==2.8.0
+cffi==1.14.0
 cli-helpers==2.0.1
 click==7.1.2
 configobj==5.0.6
+cryptography==2.9.2
+Delorean==1.0.0
 Faker==4.1.1
 flake8==3.8.3
 Flask==1.1.2
@@ -23,6 +27,7 @@ marshmallow==3.6.1
 mccabe==0.6.1
 more-itertools==8.4.0
 packaging==20.4
+parse==1.15.0
 pgcli==3.0.0
 pgspecial==1.11.10
 pluggy==0.13.1
@@ -30,8 +35,10 @@ prompt-toolkit==3.0.5
 psycopg2==2.8.5
 py==1.8.2
 pycodestyle==2.6.0
+pycparser==2.20
 pyflakes==2.2.0
 Pygments==2.6.1
+PyJWT==1.7.1
 pyparsing==2.4.7
 pyrsistent==0.16.0
 pytest==5.4.3
@@ -46,6 +53,7 @@ sqlparse==0.3.1
 tabulate==0.8.7
 terminaltables==3.1.0
 text-unidecode==1.3
+tzlocal==2.1
 wcwidth==0.2.4
 Werkzeug==1.0.1
 zipp==3.1.0
