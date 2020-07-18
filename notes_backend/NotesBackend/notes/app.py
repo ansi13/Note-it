@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 
 migrate = Migrate()
 
+
 def create_app():
     from notes.api_namespace import api_namespace
 

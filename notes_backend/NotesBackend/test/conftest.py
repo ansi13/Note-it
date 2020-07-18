@@ -72,5 +72,5 @@ def notes_random_fixture(client):
     for note_id in note_ids:
         header = headers_dict[note_id]
         url = f'/api/me/notes/{note_id}/'
-        response = client.delete(url, headers={'Authorization': header,})
+        response = client.delete(url, headers={'Authorization': header, })
         assert response.status_code == http.client.NO_CONTENT

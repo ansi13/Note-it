@@ -52,7 +52,7 @@ def validate_token_header(header, public_key):
                        'This may be key mismatch or wrong key')
         return None
     except jwt.exceptions.ExpiredSignatureError:
-        logger.error(f'Authentication header has expired')
+        logger.error('Authentication header has expired')
         return None
 
     # Check expiry is in the token
