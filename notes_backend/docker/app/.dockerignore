@@ -1,0 +1,14 @@
+.git
+.cache
+.gitignore
+.idea
+venv
+.venv
+**/__pycache__
+**/.pytest_cache
+**/logs
+**/pids
+**/migrations
+
+**/db.sqlite3
+*.md

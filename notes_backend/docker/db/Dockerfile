@@ -31,10 +31,18 @@ WORKDIR /opt/code
 
 RUN mkdir -p /opt/code/db
 # Add postgres setup
-ADD ./docker/db/postgres-setup.sh /opt/code/db/
-RUN chmod +x /opt/code/db/postgres-setup.sh
+ADD ./docker/db/* /opt/code/db/
+RUN chmod +x /opt/code/db/*.sh
 RUN /opt/code/db/postgres-setup.sh
 
+ADD requirements.txt /opt/code
+
+RUN pip3 install -r requirements.txt
+
+## Need to import all the code, due dependencies to initialise the DB
+ADD NotesBackend /opt/code/
+
+RUN /opt/code/db/prepare_db.sh
 
 # Start the database in normal operation
 USER postgres

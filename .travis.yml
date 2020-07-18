@@ -22,18 +22,21 @@ jobs:
     - stage: tests
       name: "Unit Tests"
       script:
+      - cd notes_backend
       - docker-compose build db
       - docker-compose build test-postgresql
       - docker-compose run test-postgresql
     - stage: tests
       name: "Static Analysis"
       script:
+      - cd notes_backend
       - docker-compose build static-analysis
       - docker-compose run static-analysis
     - stage: push
       script:
-        - docker-compose build server
-        - docker tag notes_server:latest ansi13/notes-backend:$TRAVIS_BRANCH
+      - cd notes_backend
+      - docker-compose build server
+      - docker tag notes_server:latest ansi13/notes-backend:$TRAVIS_BRANCH
       deploy:
         - provider: script
           script: docker push ansi13/notes-backend:$TRAVIS_BRANCH
