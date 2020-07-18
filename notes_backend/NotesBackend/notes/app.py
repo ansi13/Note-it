@@ -2,9 +2,7 @@ from flask import Flask
 from flask_restx import Api
 from flask_migrate import Migrate
 
-
 migrate = Migrate()
-
 
 def create_app():
     from notes.api_namespace import api_namespace
@@ -17,10 +15,8 @@ def create_app():
     app.config['RESTPLUS_MASK_SWAGGER'] = False
     app.config.update(db_config)
     db.init_app(app)
-    app.db = db
     migrate.init_app(app, db)
-    with app.app_context():
-        db.create_all()
+    app.db = db
 
     api.add_namespace(api_namespace)
     return app

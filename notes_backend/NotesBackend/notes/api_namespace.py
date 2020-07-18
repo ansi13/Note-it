@@ -2,7 +2,8 @@ from datetime import datetime
 import http.client
 
 # from flask import abort
-from flask_restx import Namespace, Resource, fields, reqparse, abort
+from flask_restx import Namespace, Resource,\
+    fields, reqparse, abort
 
 from notes import config
 from notes.db import db

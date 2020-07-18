@@ -8,6 +8,7 @@ venv
 **/.pytest_cache
 **/logs
 **/pids
+**/migrations
 
 **/db.sqlite3
 *.md
