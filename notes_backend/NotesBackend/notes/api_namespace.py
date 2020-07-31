@@ -19,6 +19,8 @@ authentication_parser.add_argument('Authorization', location='headers',
                                    help='Bearer Access Token')
 
 note_parser = authentication_parser.copy()
+note_parser.add_argument('title',
+                         help='Title for the note object', location='form')
 note_parser.add_argument('text', required=True,
                          help='Text for the note object', location='form')
 
@@ -29,6 +31,7 @@ search_parser.add_argument('search', help='Search keyword')
 model = {
     'id': fields.Integer(),
     'username': fields.String(),
+    'title': fields.String(),
     'text': fields.String(),
     'time_created': fields.DateTime(),
     'time_modified': fields.DateTime(),
@@ -69,6 +72,7 @@ class Notes(Resource):
         username = authentication_header_parser(args['Authorization'])
 
         new_note = NotesModel(username=username,
+                              title=args.get('title', 'New Note'),
                               text=args['text'],
                               time_created=datetime.utcnow(),
                               time_modified=datetime.utcnow())
@@ -99,7 +103,7 @@ class NotesView(Resource):
     @api_namespace.doc('Update a existing Note')
     @api_namespace.expect(note_parser)
     @api_namespace.marshal_with(note_model)
-    def put(self, note_id):
+    def post(self, note_id):
         args = note_parser.parse_args()
         username = authentication_header_parser(args['Authorization'])
 
@@ -110,6 +114,7 @@ class NotesView(Resource):
         if note_to_update.username != username:
             return '', http.client.UNAUTHORIZED
 
+        note_to_update.title = args.get('title')
         note_to_update.text = args['text']
         note_to_update.time_modified = datetime.utcnow()
 

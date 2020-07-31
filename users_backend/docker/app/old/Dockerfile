@@ -1,13 +1,15 @@
-FROM python:3.8.1-slim-buster AS compile-image
+FROM alpine:3.9 AS compile-image
+
+# Add requirements for python and pip
+RUN apk add --update python3
 
 RUN mkdir -p /opt/code
 WORKDIR /opt/code
 
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+# Install dependencies
+RUN apk add python3-dev build-base gcc linux-headers postgresql-dev libffi-dev
 
-RUN apt-get update && apt-get install -y --no-install-recommends gcc python3-dev libpq-dev
-
+# Create a virtual environment for all the Python dependencies
 RUN python3 -m venv /opt/venv
 
 # Activate the environment
@@ -20,12 +22,14 @@ RUN pip3 install -r /opt/requirements.txt
 ########
 # This image is the runtime, will copy the dependencies from the other
 ########
-FROM python:3.8.1-slim-buster AS runtime-image
+FROM alpine:3.9 AS runtime-image
 
-RUN apt-get update && apt-get install -y --no-install-recommends libpq5
+# Install python
+RUN apk add --update python3 curl libffi postgresql-libs
 
 # Create a user to run the service
-RUN addgroup --system gunicorn && adduser --system --group gunicorn
+RUN addgroup -S gunicorn
+RUN adduser -H -D -S gunicorn
 USER gunicorn
 
 # Copy the venv with compile dependencies from the compile-image
@@ -33,9 +37,10 @@ COPY --chown=gunicorn:gunicorn --from=compile-image /opt/venv /opt/venv
 # Be sure to activate the venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# Run parameters
-COPY --chown=gunicorn:gunicorn NotesBackend/ /opt/code/
+# Copy the code
+COPY --chown=gunicorn:gunicorn UsersBackend /opt/code/
 
+# Run parameters
 WORKDIR /opt/code
 EXPOSE 8000
 CMD gunicorn -c python:gunicorn_conf wsgi:application

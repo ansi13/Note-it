@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 
 def encode_token(payload, private_key):
-    return jwt.encode(payload, private_key, algorithm='RS256')
+    return jwt.encode(payload, private_key, algorithms=['RS256'])
 
 
 def decode_token(token, public_key):
@@ -24,7 +24,7 @@ def generate_token_header(username, private_key):
         'exp': datetime.utcnow() + timedelta(days=2),
     }
     token = encode_token(payload, private_key)
-    token = token.decode('utf8')
+    token = token.decode('utf-8')
     return f'Bearer {token}'
 
 
