@@ -46,3 +46,18 @@ def test_login(client):
         'Authorized': ANY,
     }
     assert result == expected
+
+
+def test_invalid_login(client):
+    username = fake.name()
+    password = fake.password(length=15, special_chars=True)
+    new_user = {
+        'username': username,
+        'password': password,
+    }
+    response = client.post('/api/signup/', data=new_user)
+    assert http.client.CREATED == response.status_code
+    new_user['password'] += 'du'
+    response = client.post('/api/login/', data=new_user)
+
+    assert http.client.UNAUTHORIZED == response.status_code

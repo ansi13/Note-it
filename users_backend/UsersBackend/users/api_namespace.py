@@ -1,7 +1,8 @@
 from datetime import datetime
 import http.client
 
-from flask_restx import Namespace, Resource, abort, fields
+import bcrypt
+from flask_restx import Namespace, Resource, fields
 
 from users import config
 from users.db import db
@@ -20,18 +21,6 @@ model = {
 }
 user_model = api_namespace.model('User', model)
 
-
-def authentication_header_parser(value):
-    username = validate_token_header(value, config.PUBLIC_KEY)
-    if username is None:
-        abort(401)
-    return username
-
-
-authentication_parser = api_namespace.parser()
-authentication_parser.add_argument('Authorization', location='headers',
-                                   type=str,
-                                   help='Bearer Access Token')
 
 login_parser = api_namespace.parser()
 login_parser.add_argument('username', type=str, required=True,
@@ -61,7 +50,7 @@ class UserLogin(Resource):
 
         # Check the password
         # REMEMBER, THIS IS NOT SAFE. DO NOT STORE PASSWORDS IN PLAIN
-        if user.password != args['password']:
+        if not (bcrypt.checkpw(args['password'].encode('utf-8'), user.password)):
             return '', http.client.UNAUTHORIZED
 
         # Generate the header
@@ -80,8 +69,11 @@ class UserCreate(Resource):
         """
         args = login_parser.parse_args()
 
+        salt = bcrypt.gensalt(rounds=12)
+        hashed = bcrypt.hashpw(args['password'].encode('utf-8'), salt)
+
         new_user = UserModel(username=args['username'],
-                             password=args['password'],
+                             password=hashed,
                              time_created=datetime.utcnow())
         db.session.add(new_user)
         db.session.commit()
