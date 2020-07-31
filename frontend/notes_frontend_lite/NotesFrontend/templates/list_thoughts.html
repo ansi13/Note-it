@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br>
+{% for note in notes %}
+<div class="row justify-content-md-center mx-auto">
+  <a href="{{url_for('edit_note', note_id=note.id)}}" class="custom-card">
+    <div class="card border-dark mt-1 mb-1" style="min-width: 500px; max-width: 500px;">
+      <div class="card-body">
+        <h5 class="card-subtitle mb-2">
+          {{note.title}}
+        </h5>
+        <p class="card-text text-truncate">{{note.text}}</p>
+        <p></p>
+        <a href="{{url_for('delete_note', note_id=note.id)}}" class="card-link text-danger">Delete</a>
+      </div>
+      <div class="card-footer bg-transparent border-dark">
+        <div class="row mx-md-n5">
+          <div class="col px-md-5">
+            <p class="card-text text-left">Created</p>
+          </div>
+          <div class="col px-md-5">
+            <p class="card-text text-right">Updated</p>
+          </div>
+        </div>
+        <div class="row mx-md-n5">
+          <div class="col px-md-5">
+            <small class="text-muted text-left">{{note.time_created}}</small>
+          </div>
+          <div class="col pl-md-5">
+            <small class="text-muted text-right">{{note.time_modified}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </a>
+</div>
+  <br>
+{% endfor %}
+
+{% endblock %}

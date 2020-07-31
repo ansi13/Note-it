@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+
+    <link rel="stylesheet" href='/static/bootstrap.css' >
+    <style>
+      a.custom-card,
+      a.custom-card:hover {
+        color: inherit;
+        text-decoration: none;
+      }
+    </style>
+    <title>Note-It!</title>
+  </head>
+
+  <body>
+    <div class="bs-component">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <a class="navbar-brand" href="{{ url_for('index')}}">Note It!</a>
+          {% if username %}
+            <a class="nav-item nav-link active" href="{{ url_for('new_note')}}">New <span class="sr-only">(current)</span></a>
+            <form class="form-inline ml-md-auto my-2 my-lg-0" action="{{ url_for('search_notes') }}">
+              <input class="form-control mr-sm-2 w-75-xs" type="text" name="search" placeholder="Search" value="{{ search_query }}">
+              <button class="btn btn-secondary my-2 my-sm-0" type="submit">Search</button>
+            </form>
+            <ul class="navbar-nav ml-md-auto">
+              <li class="nav-item active">
+                  <a class="nav-link" href="#">{{username}} <span class="sr-only">(current)</span></a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('logout')}}">Logout <span class="sr-only">(current)</span></a>
+              </li>
+            </ul>
+          {% else %}
+          <ul class="navbar-nav ml-md-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('login')}}">Login <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('signup')}}">Signup <span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
+          {% endif %}
+        </nav>
+    </div>
+    <div class="container">
+      <div class="row justify-content-md-center mx-auto">
+      <div class="col col-lg-2"></div>
+      <div class="col-md-auto">
+        {% block content %}
+        {% endblock %}
+      </div>
+      <div class="col col-lg-2"></div>
+    </div>
+    </div>
+  <br>
+  </body>
+</html>
