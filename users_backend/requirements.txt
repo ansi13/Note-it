@@ -20,7 +20,7 @@ Flask-Cors==3.0.8
 Flask-Migrate==2.5.3
 flask-restx==0.2.0
 Flask-Script==2.0.6
-Flask-SQLAlchemy==2.4.33.1.7
+Flask-SQLAlchemy==2.4.3
 freezegun==0.3.15
 gunicorn==20.0.4
 humanize==2.4.1
