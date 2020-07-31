@@ -49,7 +49,9 @@ class UserLogin(Resource):
 
         # Check the password
         if not (
-            bcrypt.checkpw(args["password"].encode("utf-8"), user.password)
+            bcrypt.checkpw(
+                args["password"].encode("utf8"), user.password.encode("utf8")
+            )
         ):
             return "", http.client.UNAUTHORIZED
 
@@ -69,11 +71,11 @@ class UserCreate(Resource):
         args = login_parser.parse_args()
 
         salt = bcrypt.gensalt(rounds=12)
-        hashed = bcrypt.hashpw(args["password"].encode("utf-8"), salt)
+        hashed = bcrypt.hashpw(args["password"].encode("utf8"), salt)
 
         new_user = UserModel(
             username=args["username"],
-            password=hashed,
+            password=hashed.decode("utf8"),
             time_created=datetime.utcnow(),
         )
         db.session.add(new_user)
