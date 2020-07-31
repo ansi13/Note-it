@@ -19,8 +19,6 @@ def create_app():
     db.init_app(app)
     app.db = db
     migrate.init_app(app, db)
-    with app.app_context():
-        db.create_all()
 
     api.add_namespace(api_namespace)
     return app

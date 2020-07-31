@@ -12,6 +12,7 @@ fake = Faker()
 @freeze_time('2019-05-07 13:47:34')
 def test_create_note(client):
     new_note = {
+        'title': fake.text(50),
         'text': fake.text(240),
     }
     header = token_validation.generate_token_header(fake.name(),
@@ -27,6 +28,7 @@ def test_create_note(client):
     expected = {
         'id': ANY,
         'username': ANY,
+        'title': new_note['title'],
         'text': new_note['text'],
         'time_created': '2019-05-07T13:47:34',
         'time_modified': '2019-05-07T13:47:34',
@@ -36,6 +38,7 @@ def test_create_note(client):
 
 def test_create_note_unauthorized(client):
     new_note = {
+        'title': fake.text(50),
         'text': fake.text(240),
     }
     response = client.post('/api/me/notes/', data=new_note)
@@ -57,6 +60,7 @@ def test_list_all_notes(client, notes_fixture):
     for note in result:
         expected = {
             'username': username,
+            'title': ANY,
             'text': ANY,
             'id': ANY,
             'time_created': ANY,
@@ -68,6 +72,7 @@ def test_list_all_notes(client, notes_fixture):
 def test_search_notes(client):
     username = fake.name()
     new_note = {
+        'title': fake.text(50),
         'text': 'dummy text for search test',
     }
     header = token_validation.generate_token_header(username,
@@ -86,6 +91,7 @@ def test_search_notes(client):
     assert len(result) > 0
     for note in result:
         expected = {
+            'title': ANY,
             'text': ANY,
             'username': username,
             'id': ANY,
@@ -108,6 +114,7 @@ def test_view_note(client, notes_fixture):
     assert http.client.OK == response.status_code
     assert result['username'] == username
     assert 'text' in result
+    assert 'title' in result
     assert 'time_modified' in result
     assert 'time_created' in result
     assert result['id'] == note_ids[0]
@@ -130,11 +137,12 @@ def test_view_note_existing_unauthorized(client, notes_random_fixture):
 def test_update_note(client, notes_fixture):
     note_ids, headers = notes_fixture
     text = {
+        'title': fake.text(50),
         'text': fake.text(250)
     }
 
-    response = client.put(f'/api/me/notes/{note_ids[1]}/', data=text,
-                          headers=headers)
+    response = client.post(f'/api/me/notes/{note_ids[1]}/', data=text,
+                           headers=headers)
     old_result = response.json
     assert http.client.OK == response.status_code
 
@@ -156,7 +164,7 @@ def test_update_note_existing_unauthorized(client, notes_random_fixture):
         'Authorization': header,
     }
 
-    response = client.put(f'/api/me/notes/{note_ids[1]}/', data=text,
+    response = client.post(f'/api/me/notes/{note_ids[1]}/', data=text,
                           headers=headers)
     old_result = response.json
     assert (http.client.NOT_FOUND == response.status_code or

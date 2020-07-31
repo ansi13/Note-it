@@ -11,7 +11,7 @@ def encode_token(payload, private_key):
 
 
 def decode_token(token, public_key):
-    return jwt.decode(token, public_key, algoritms='RS256')
+    return jwt.decode(token, public_key, algorithms=['RS256'])
 
 
 def generate_token_header(username, private_key):
