@@ -1,8 +1,7 @@
 import http
 import os
 
-from flask import Flask, session, render_template, request, redirect,\
-    url_for, make_response
+from flask import Flask, session, render_template, request, redirect, url_for
 from flask_cors import CORS
 
 import requests
@@ -12,7 +11,7 @@ from NotesFrontend import token_validation
 
 
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
+app.secret_key = b'5KoNvz3m-OALX3JJCiQcDw'
 CORS(app)
 
 USER_BACKEND = os.environ['USER_BACKEND_URL']
