@@ -6,7 +6,7 @@ cffi==1.14.0
 cli-helpers==2.0.1
 click==7.1.2
 configobj==5.0.6
-cryptography==2.9.2
+cryptography==3.2
 Delorean==1.0.0
 Faker==4.1.1
 flake8==3.8.3
