@@ -5,7 +5,7 @@ attrs==19.3.0
 Babel==2.8.0
 bcrypt==3.1.7
 black==19.10b0
-certifi==2020.6.20
+certifi==2022.12.7
 cffi==1.14.0
 chardet==3.0.4
 cli-helpers==2.0.1
